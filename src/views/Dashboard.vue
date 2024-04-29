@@ -1,44 +1,47 @@
 <script setup>
 import MiniStatisticsCard from "@/examples/Cards/MiniStatisticsCard.vue";
 import GradientLineChart from "@/examples/Charts/GradientLineChart.vue";
-import Carousel from "./components/Carousel.vue";
-import CategoriesList from "./components/CategoriesList.vue";
+import BarsChart from "@/examples/Charts/BarChart.vue";
+import DonutChart from "@/examples/Charts/DonutChart.vue";
+// import Carousel from "./components/Carousel.vue";
+// import CategoriesList from "./components/CategoriesList.vue";
+import TargetTable from "./components/TargetRevenue.vue";
 
-import US from "@/assets/img/icons/flags/US.png";
-import DE from "@/assets/img/icons/flags/DE.png";
-import GB from "@/assets/img/icons/flags/GB.png";
-import BR from "@/assets/img/icons/flags/BR.png";
+// import US from "@/assets/img/icons/flags/US.png";
+// import DE from "@/assets/img/icons/flags/DE.png";
+// import GB from "@/assets/img/icons/flags/GB.png";
+// import BR from "@/assets/img/icons/flags/BR.png";
 
-const sales = {
-  us: {
-    country: "United States",
-    sales: 2500,
-    value: "$230,900",
-    bounce: "29.9%",
-    flag: US,
-  },
-  germany: {
-    country: "Germany",
-    sales: "3.900",
-    value: "$440,000",
-    bounce: "40.22%",
-    flag: DE,
-  },
-  britain: {
-    country: "Great Britain",
-    sales: "1.400",
-    value: "$190,700",
-    bounce: "23.44%",
-    flag: GB,
-  },
-  brasil: {
-    country: "Brasil",
-    sales: "562",
-    value: "$143,960",
-    bounce: "32.14%",
-    flag: BR,
-  },
-};
+// const sales = {
+//   us: {
+//     country: "United States",
+//     sales: 2500,
+//     value: "$230,900",
+//     bounce: "29.9%",
+//     flag: US,
+//   },
+//   germany: {
+//     country: "Germany",
+//     sales: "3.900",
+//     value: "$440,000",
+//     bounce: "40.22%",
+//     flag: DE,
+//   },
+//   britain: {
+//     country: "Great Britain",
+//     sales: "1.400",
+//     value: "$190,700",
+//     bounce: "23.44%",
+//     flag: GB,
+//   },
+//   brasil: {
+//     country: "Brasil",
+//     sales: "562",
+//     value: "$143,960",
+//     bounce: "32.14%",
+//     flag: BR,
+//   },
+// };
 </script>
 <template>
   <div class="py-4 container-fluid">
@@ -47,11 +50,11 @@ const sales = {
         <div class="row">
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="Today's Money"
-              value="$53,000"
+              title="Vendas Hoje"
+              value="R$ 1.250,00"
               description="<span
                 class='text-sm font-weight-bolder text-success'
-                >+55%</span> since yesterday"
+                >+55%</span> a mais que ontem"
               :icon="{
                 component: 'ni ni-money-coins',
                 background: 'bg-gradient-primary',
@@ -61,11 +64,11 @@ const sales = {
           </div>
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="Today's Users"
-              value="2,300"
+              title="Reembolso"
+              value="R$ 78,00"
               description="<span
                 class='text-sm font-weight-bolder text-success'
-                >+3%</span> since last week"
+                >+3%</span> a menos que ontem"
               :icon="{
                 component: 'ni ni-world',
                 background: 'bg-gradient-danger',
@@ -75,11 +78,11 @@ const sales = {
           </div>
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="New Clients"
-              value="+3,462"
+              title="Novos Produtos"
+              value="+5"
               description="<span
                 class='text-sm font-weight-bolder text-danger'
-                >-2%</span> since last quarter"
+                >-1%</span> desde ontem"
               :icon="{
                 component: 'ni ni-paper-diploma',
                 background: 'bg-gradient-success',
@@ -89,11 +92,11 @@ const sales = {
           </div>
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="Sales"
-              value="$103,430"
+              title="Vendas no Mês"
+              value="R$ 10.500,53"
               description="<span
                 class='text-sm font-weight-bolder text-success'
-                >+5%</span> than last month"
+                >+5%</span> que o último mês"
               :icon="{
                 component: 'ni ni-cart',
                 background: 'bg-gradient-warning',
@@ -108,7 +111,7 @@ const sales = {
             <div class="card z-index-2">
               <gradient-line-chart
                 id="chart-line"
-                title="Sales Overview"
+                title="Vendas por Mês"
                 description="<i class='fa fa-arrow-up text-success'></i>
       <span class='font-weight-bold'>4% more</span> in 2021"
                 :chart="{
@@ -134,7 +137,30 @@ const sales = {
             </div>
           </div>
           <div class="col-lg-5">
-            <carousel />
+            <donut-chart
+                id="chart-donut"
+                title="Qualidade dos Produtos"
+                description=""
+                :chart="{
+                  labels: [
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec',
+                  ],
+                  datasets: [
+                    {
+                      label: 'Mobile Apps',
+                      data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+                    },
+                  ],
+                }"
+            />
           </div>
         </div>
         <div class="row mt-4">
@@ -142,11 +168,12 @@ const sales = {
             <div class="card">
               <div class="p-3 pb-0 card-header">
                 <div class="d-flex justify-content-between">
-                  <h6 class="mb-2">Sales by Country</h6>
+                  <h6 class="mb-2">Meta X Faturamento</h6>
                 </div>
               </div>
               <div class="table-responsive">
-                <table class="table align-items-center">
+                <Target-Table></Target-Table>
+                <!-- <table class="table align-items-center">
                   <tbody>
                     <tr v-for="(sale, index) in sales" :key="index">
                       <td class="w-30">
@@ -182,12 +209,37 @@ const sales = {
                       </td>
                     </tr>
                   </tbody>
-                </table>
+                </table> -->
               </div>
             </div>
           </div>
           <div class="col-lg-5">
-            <categories-list
+              <Bars-Chart
+                id="chart-bar"
+                title="Status das Campanhas"
+                description=""
+                :height="'200'"
+                :chart="{
+                  labels: [
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec',
+                  ],
+                  datasets: [
+                    {
+                      label: 'Mobile Apps',
+                      data: [50],
+                    },
+                  ],
+                }"
+              />
+            <!-- <categories-list
               :categories="[
                 {
                   icon: {
@@ -216,7 +268,7 @@ const sales = {
                   description: '+ 430',
                 },
               ]"
-            />
+            /> -->
           </div>
         </div>
       </div>

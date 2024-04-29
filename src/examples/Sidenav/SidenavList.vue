@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
 import SidenavItem from "./SidenavItem.vue";
-import SidenavCard from "./SidenavCard.vue";
+// import SidenavCard from "./SidenavCard.vue";
 
 const store = useStore();
 const isRTL = computed(() => store.state.isRTL);
@@ -23,8 +23,8 @@ const getRoute = () => {
     <ul class="navbar-nav">
       <li class="nav-item">
         <sidenav-item
-          to="/dashboard-default"
-          :class="getRoute() === 'dashboard-default' ? 'active' : ''"
+          to="/dashboard"
+          :class="getRoute() === 'dashboard' ? 'active' : ''"
           :navText="isRTL ? 'لوحة القيادة' : 'Dashboard'"
         >
           <template v-slot:icon>
@@ -35,9 +35,9 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/tables"
-          :class="getRoute() === 'tables' ? 'active' : ''"
-          :navText="isRTL ? 'الجداول' : 'Tables'"
+          to="/estrategies"
+          :class="getRoute() === 'Anulação Estratégica' ? 'active' : ''"
+          :navText="isRTL ? 'Estrategies' : 'Anulação Estratégica'"
         >
           <template v-slot:icon>
             <i
@@ -50,16 +50,28 @@ const getRoute = () => {
       <li class="nav-item">
         <sidenav-item
           to="/billing"
-          :class="getRoute() === 'billing' ? 'active' : ''"
-          :navText="isRTL ? 'الفواتیر' : 'Billing'"
+          :class="getRoute() === 'Plataformas' ? 'active' : ''"
+          :navText="isRTL ? 'Platforms' : 'Plataformas'"
         >
           <template v-slot:icon>
-            <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
+            <i class="ni ni-shop text-success text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
 
       <li class="nav-item">
+        <sidenav-item
+          to="/billing"
+          :class="getRoute() === 'config' ? 'active' : ''"
+          :navText="isRTL ? 'الفواتیر' : 'Configurações'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-settings text-success text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+
+      <!-- <li class="nav-item">
         <sidenav-item
           to="/virtual-reality"
           :class="getRoute() === 'virtual-reality' ? 'active' : ''"
@@ -69,9 +81,9 @@ const getRoute = () => {
             <i class="ni ni-app text-info text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <sidenav-item
           to="/rtl-page"
           :class="getRoute() === 'rtl-page' ? 'active' : ''"
@@ -81,7 +93,7 @@ const getRoute = () => {
             <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
 
       <li class="mt-3 nav-item">
         <h6
@@ -112,7 +124,7 @@ const getRoute = () => {
           </template>
         </sidenav-item>
       </li>
-
+<!-- 
       <li class="nav-item">
         <sidenav-item
           to="/signin"
@@ -123,9 +135,9 @@ const getRoute = () => {
             <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <sidenav-item
           to="/signup"
           :class="getRoute() === 'signup' ? 'active' : ''"
@@ -135,14 +147,14 @@ const getRoute = () => {
             <i class="ni ni-collection text-info text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
     </ul>
   </div>
 
   <div class="pt-3 mx-3 mt-3 sidenav-footer">
-    <sidenav-card
+    <!-- <sidenav-card
       :card="{
-        title: 'Need Help?',
+        title: 'Precisa de Ajuda?',
         description: 'Please check our docs',
         links: [
           {
@@ -159,6 +171,6 @@ const getRoute = () => {
           },
         ],
       }"
-    />
+    /> -->
   </div>
 </template>
