@@ -1,18 +1,48 @@
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-mask">
+    <div v-if="openModal" class="modal-mask">
       <div class="modal-container">
         <div class="modal-header">
-          <slot name="header">{{ localProduct.productName }}</slot>
+          <h3>{{localProduct.productName}}</h3>
         </div>
-        {{ product }}
-        <div >
-          <img style="padding: 6px;" :src="currFlag" />
-          <img  :src="flag_real" style="width: 30px; padding: 6px;"/>
-          <img  :src="flag_ff" style="width: 30px; padding: 6px;"/>
-          <img  :src="flag_temp" style="width: 26px; padding: 6px;"/>
-          <span>22º</span>
+        <div style="display: flex; margin-top: 10px">
+          <div>
+            <div class="dropdown">
+              <img style="padding: 6px; cursor: pointer;" :src="currFlag" />
+              <div class="dropdown-content" >
+                <option href="#" v-for="item in pais" :key="item.value" @click="selectCountry(item)">
+                  {{ item.text }}
+                </option>
+              </div>
+            </div>
+            
+            <div class="dropdown">
+              <img :src="localProduct.currentcy === 'USD' ? flag_dolar : flag_real" style="width: 30px; padding: 6px;"/>
+              <div class="dropdown-content" >
+                <option v-for="(option, index) in optionsCurrency" @click="selectCurrency(option)" :key="index">
+                  {{ option.text }}
+                </option>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 10px;">
+            <div>
+            <span style="margin-left: 10px;">Plataforma: </span>
+              <select class="form-control form-control-sm" style=" margin-left: 10px;" v-model="localProduct.plataforma">
+                <option v-for="(itemPlatform, index) in optionsPlatform" @click="selectPlatform(itemPlatform)" :key="index">
+                  {{ itemPlatform.text }}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
+
+          <div class="row">
+            <div class="col">
+              <label for="serachVolum">Produto</label>
+              <input type="text" class="form-control" id="serachVolum" placeholder="Nome do Produto" v-model="localProduct.productName">
+            </div>
+          </div>
 
         <div class="modal-header">
           <span>Tamanho da Oportunidade</span>
@@ -21,18 +51,12 @@
         <div class="modal-body">
           <div class="row">
             <div class="col">
-              <label for="serachVolum">Produto</label>
-              <input type="text" class="form-control" id="serachVolum" placeholder="Nome do Produto" v-model="localProduct.productName">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
               <label for="serachVolum">Volume de Buscas</label>
-              <input type="text" class="form-control" id="serachVolum" placeholder="02" v-model="localProduct.searchVolum">
+              <input type="text" class="form-control" id="serachVolum" placeholder="2" v-model="localProduct.searchVolum">
             </div>
             <div class="col">
               <label for="serachVolum">Anunciantes</label>
-              <input type="text" class="form-control" id="serachVolum" placeholder="02" v-model="localProduct.qtdAdvertiser">
+              <input type="text" class="form-control" id="serachVolum" placeholder="2" v-model="localProduct.qtdAdvertiser">
             </div>
             <div class="w-100"></div>
             <div class="col" style="margin-top: 10px">
@@ -52,19 +76,27 @@
                 </option>
               </select>
             </div>
+
           </div>
-            <div class="row" style="margin: 10px">
-              <div class="alert alert-dismissible fade show" :class="getCorrelacao" role="alert">
-                  <span class="alert-text"><strong>Correlação: </strong>{{ product.correlacao }}</span>
-                  <span class="alert-icon" style="margin-left: 0.5em"><i class="ni ni-like-2"></i></span>
-              </div>
+          <div class="row">
+            <div class="col" style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+              <label for="serachVolum">Fundo de Funil</label>
+              <input type="checkbox" v-model="localProduct.isFF" @click="selectFF">
             </div>
+
+            <div class="col">
+              <label for="temperature">Temperatura</label>
+              <img :src="flag_temp" style="width: 30px; padding: 6px;"/>
+              <input type="text" class="form-control" id="temperature" placeholder="22" v-model="localProduct.temperature">
+            </div>
+          </div>
         </div>
         
 
         <div class="modal-footer">
           <button type="button" @click="close" class="btn btn-outline-warning">Cancelar</button>
-          <button type="button" class="btn alert-success" style="color: #fff" @click="save">Próximo</button>
+          <button v-if="isEdit" type="button" class="btn alert-success" style="color: #fff" @click="save">Próximo</button>
+          <button v-else type="button" class="btn alert-success" style="color: #fff" @click="addNew">Adicionar</button>
         </div>
       </div>
     </div>
@@ -76,21 +108,23 @@ import { ref, watch, computed } from 'vue'
 import BR from "@/assets/img/icons/flags/BR.png";
 import EUA from "@/assets/img/icons/flags/US.png";
 import REAL from "@/assets/img/icons/flags/real.png";
+import DOLAR from "@/assets/img/icons/flags/dolar.png";
 import FF from "@/assets/img/icons/flags/ff.png";
 import TEMP from "@/assets/img/icons/flags/temp.png";
+import Product from '../Model/Product';
 
 const props = defineProps({
-  show: Boolean,
-  product: Object
+  openModal: Boolean,
+  isEdit: Boolean,
+  product: Product
 })
 
-let localProduct = ref({...props.product})
-// let salesPage = ref(props.produ}ct.salesPage)
-// let isRecurrent = ref(props.product.isRecurrent)
+let localProduct = computed(() => props.product)
 
 const flag_br = ref(BR)
 const flag_eua = ref(EUA)
 const flag_real = ref(REAL)
+const flag_dolar = ref(DOLAR)
 const flag_ff = ref(FF)
 const flag_temp = ref(TEMP)
 const currFlag = ref(flag_br.value)
@@ -101,40 +135,93 @@ const options = ref([
   { text: 'Não', value: false }
 ])
 
+const pais = ref([
+  { text: 'Gringa', value: 0 },
+  { text: 'Brasil', value: 1 }
+])
+
+const optionsPlatform = ref([
+  { text: 'Hotmart'},
+  { text: 'Kiwify'},
+  { text: 'Eduzz'},
+  { text: 'Monetizze'},
+  { text: 'Ticto'},
+  { text: 'Doppus'},
+  { text: 'ClickBank'},
+  { text: 'BuyGoods'},
+  { text: 'Digistore24'}
+])
+
+const optionsCurrency = ref([
+  { text: 'R$', value: 'BRL', flag: REAL },
+  { text: 'US$', value: 'USD', flag: DOLAR }
+])
+
 const optionsrRecurrency = ref([
   { text: 'Sim', value: true },
   { text: 'Não', value: false }
 ])
 
 function close() {
-  localProduct.value = {}
-  console.log('fechou')
+  // localProduct.value = {}
+  // console.log('fechou')
     emit('close');
 }
 
-const getCorrelacao = computed(() => {
-  const type = props.product.correlacao
-  if (type == 'Ótimo') return 'alert-success'
-  if (type == 'Regular') return 'alert-warning text-black'
-  if (type == 'Ruim') return 'alert-danger text-white'
-  return 'alert-info' // valor padrão
-})
+// const getCorrelacao = computed(() => {
+//   const type = props.product.correlacao
+//   if (type == 'Ótimo') return 'alert-success'
+//   if (type == 'Regular') return 'alert-warning text-black'
+//   if (type == 'Ruim') return 'alert-danger text-white'
+//   return 'alert-info' // valor padrão
+// })
 
-function save(val) {
-  Object.assign(localProduct.value, val)
-  console.log(localProduct.value)
-  // emit('saveProduct', localProduct.value)
+function save() {
+  emit('saveProduct', localProduct.value)
 }
 
-// watch(() => salesPage.value, (newValue) => {
-//   localProduct.value.salesPage = newValue
-// }, { immediate: true })
+function addNew() {
+  console.log(localProduct.value)
+  if (localProduct.value.productName && localProduct.value.plataforma && localProduct.value.searchVolum && localProduct.value.qtdAdvertiser && localProduct.value.salesPage && localProduct.value.isRecurrent) {
+    emit('addNewProduct', localProduct.value)
+  } else {
+    alert('Por favor, preencha todos os campos.')
+  }
+}
+
+function selectCountry(item) {
+  console.log(item)
+  localProduct.value.country = item.value === 0 ? 'en' : 'br'
+}
+
+function selectCurrency(item) {
+  console.log(item)
+  localProduct.value.currentcy = item.value
+}
+
+function selectFF() {
+  localProduct.value.isFF = !localProduct.value.isFF
+}
+
+function selectPlatform(item) {
+  console.log('item')
+  console.log(item)
+  localProduct.value.plataforma = item.value
+}
 
 watch(() => localProduct.value?.country, (newCountry) => {
   if (newCountry === 'br') {
     currFlag.value = flag_br.value
   } else if (newCountry === 'en') {
     currFlag.value = flag_eua.value
+  }
+}, { immediate: true })
+
+watch(() => localProduct.values?.isFF, (newFF) => {
+  if (newFF) {
+    flag_ff.value = FF
+  } else {
+    flag_ff.value = FF
   }
 }, { immediate: true })
 
@@ -200,10 +287,28 @@ watch(() => localProduct.value?.country, (newCountry) => {
   transform: scale(1.1);
 }
 
-/* .text-grey {
-  color: #c9c9c9;
+.dropdown {
+  position: relative;
+  display: inline-block;
 }
-.text-black {
-  color: #000000 !important;
-} */
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  z-index: 1;
+  background-color: #f6f9fc;
+}
+
+.dropdown-content option {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+.dropdown-content option:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
 </style>

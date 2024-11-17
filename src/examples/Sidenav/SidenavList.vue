@@ -49,7 +49,7 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/billing"
+          to="/platform"
           :class="getRoute() === 'Plataformas' ? 'active' : ''"
           :navText="isRTL ? 'Platforms' : 'Plataformas'"
         >
